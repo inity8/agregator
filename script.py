@@ -1,5 +1,18 @@
 import scrapy
 
+
+# <div> 3 & nbsp;150 & nbsp;000 & nbsp;₽ </div>
+
+def clean_price(text):
+    digits = [symbol for symbol in text if symbol.isdigit()]
+    cleaned_text = ''.join(text)
+    return int(cleaned_text)
+
+print(77)
+print(clean_price("4\u00a0525\u00a0120\u00a0\u20bd"))
+exit()
+
+
 class Spider(scrapy.Spider):
     name = 'spider'
     start_urls = ['https://auto.ru/cars/tesla/all/']
@@ -9,12 +22,16 @@ class Spider(scrapy.Spider):
             link = car_div.css('a.Link ListingItemTitle-module__link').get()
             title = link.css('::text').get()
             href = link.css('::attr(href)').get()
+            raw_price = car_div.css('.ListingItemPrice-module__content::text').get()
 
+            price = None if not raw_price else
 
             yield {
                 'title': title,
                 'href': href,
+                'price': price,
             }
+
         #
         # for next_page in response.css('a.next-posts-link'):
         #     yield response.follow(next_page, self.parse)
