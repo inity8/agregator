@@ -6,11 +6,12 @@ import scrapy
 def clean_price(text):
     digits = [symbol for symbol in text if symbol.isdigit()]
     cleaned_text = ''.join(text)
+    if not cleaned_text:
+        return None
     return int(cleaned_text)
 
-print(77)
-print(clean_price("4\u00a0525\u00a0120\u00a0\u20bd"))
-exit()
+# print(clean_price("4\u00a0525\u00a0120\u00a0\u20bd"))
+# exit()
 
 
 class Spider(scrapy.Spider):
@@ -24,7 +25,7 @@ class Spider(scrapy.Spider):
             href = link.css('::attr(href)').get()
             raw_price = car_div.css('.ListingItemPrice-module__content::text').get()
 
-            price = None if not raw_price else
+            price = raw_price and clean_price(raw_price) or None
 
             yield {
                 'title': title,
