@@ -1,11 +1,11 @@
 import scrapy
 
-# def clean_price(text):
-#     digits = [symbol for symbol in text if symbol.isdigit()]
-#     cleaned_text = ''.join(digits)
-#     if not cleaned_text:
-#         return None
-#     return int(cleaned_text)
+def clean_price(text):
+    digits = [symbol for symbol in text if symbol.isdigit()]
+    cleaned_text = ''.join(digits)
+    if not cleaned_text:
+        return None
+    return int(cleaned_text)
 
 
 class Spider(scrapy.Spider):
@@ -19,11 +19,9 @@ class Spider(scrapy.Spider):
             link = car_div.css('a.ListingItemTitle-module__link')
             title = link.css('::text').get()
             href = link.css('::attr(href)').get()
+            raw_price = car_div.css('.ListingItemPrice-module__content::text').get()
 
-            # raw_price = car_div.css('.ListingItemPrice-module__content::text').get()
-
-            price = 1
-                # raw_price and clean_price(raw_price) or None
+            price = raw_price and clean_price(raw_price) or None
 
             img_urls = car_div.css('.Brazzers__image::attr(data-src)').getall()
             yield {
