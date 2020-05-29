@@ -4,11 +4,9 @@ from cleaning import clean_price
 
 class Spider(scrapy.Spider):
     name = 'spider'
-    start_urls = ['https://auto.ru/balashiha/cars/tesla/all/?currency=EUR']
+    start_urls = ['https://auto.ru/cars/tesla/all/?currency=EUR']
 
     def parse(self, response):
-        # for car_div in response.css('.ListingCars-module__listingItem'):
-        # for car_div in response.css('.ListingItemTitle-module__clicker'):
         for car_div in response.css('.ListingItem-module__columnCellSummary'):
             link = car_div.css('a.ListingItemTitle-module__link')
             title = link.css('::text').get()
@@ -24,3 +22,4 @@ class Spider(scrapy.Spider):
                 'price_eur': price,
                 'imgs': [response.urljoin(img) for img in img_urls],
             }
+
